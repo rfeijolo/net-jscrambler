@@ -84,12 +84,12 @@ namespace JScrambler.Client
             }
         }
 
-        public ProjectInfoResponse GetInfo(string projectId)
+        public ProjectInfoResult GetInfo(string projectId)
         {
             var resourcePath = string.Format("/code/{0}.json", projectId);
             var response = ExecuteRestRequest(Method.GET, resourcePath, new SortedDictionary<string, string>());
 
-            return new JsonDeserializer().Deserialize<ProjectInfoResponse>(response);
+            return new JsonDeserializer().Deserialize<ProjectInfoResult>(response);
         }
 
         public bool DownloadProject(string projectId)

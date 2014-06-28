@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace JScrambler.Client
 {
-    public class ProjectInfoResponse
+    public class ProjectInfoResult
     {
-        public ProjectInfoResponse()
+        public ProjectInfoResult()
         {
             this.Sources = new List<Sources>();
         }
