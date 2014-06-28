@@ -7,7 +7,7 @@ History
 -------
 **2014-06-28**
 
-* Add initialization from from configuration;
+* Add initialization from configuration;
 * Update documentation.
 
 **2014-06-18**
@@ -19,6 +19,19 @@ API
 All of the API operations are wrapped in a static facade with the following properties/methods:
 
 ### Client
+
+#### Installation
+
+** Manual **
+
+* Build from source;
+* Add JScrambler.Client.dll to your references;
+* Install dependencies `DotNetZip` and `RestSharp` using nuget console.
+
+
+** Using nuget console **
+
+Soon.
 
 #### Configuration (optional)
 
