@@ -8,46 +8,50 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using JScrambler.Client.Configuration;
+using System.Configuration;
 
 namespace JScrambler.Client
 {
     public class JScrambler
     {
-        private string accessKey;
-        private string secretKey;
-        private string apiHost = "api.jscrambler.com";
-        private int apiVersion = 3;
-#if DEBUG
-        private int apiPort = 80;
-#else
-        private int apiPort = 443;
-#endif
-        private byte[] tmpFileBytes;
+        private ServiceSection serviceConfig;
 
         private string ApiUrl 
         {
             get
             {
-                return "http" + (this.apiPort == 443 ? "s" : "") + "://" + this.apiHost + (this.apiPort != 80 ? (":" + this.apiPort) : "") + "/v" + this.apiVersion;
+                return "http" + (this.serviceConfig.ApiPort == 443 ? "s" : "") + "://" + this.serviceConfig.ApiHost + (this.serviceConfig.ApiPort != 80 ? (":" + this.serviceConfig.ApiPort) : "") + "/v" + this.serviceConfig.ApiVersion;
             }
+        }
+
+        public JScrambler()
+        {
+            serviceConfig = ConfigurationManager.GetSection(ServiceSection.SectionName) as ServiceSection;
         }
 
         public JScrambler(string accessKey, string secretKey)
         {
-            this.accessKey = accessKey;
-            this.secretKey = secretKey;
+            this.serviceConfig = this.serviceConfig ?? new ServiceSection();
+            this.serviceConfig.Credentials.AccessKey = accessKey;
+            this.serviceConfig.Credentials.SecretKey = secretKey;
+#if DEBUG
+            this.serviceConfig.ApiPort = 80;
+#endif
         }
 
         public JScrambler(string accessKey, string secretKey, string apiHost)
             : this(accessKey, secretKey)
         {
-            this.apiHost = apiHost;
+            this.serviceConfig = this.serviceConfig ?? new ServiceSection();
+            this.serviceConfig.ApiHost = apiHost;
         }
 
         public JScrambler(string accessKey, string secretKey, string apiHost, int apiPort)
             : this(accessKey, secretKey, apiHost)
         {
-            this.apiPort = apiPort;
+            this.serviceConfig = this.serviceConfig ?? new ServiceSection();
+            this.serviceConfig.ApiPort = apiPort;
         }
 
         /* API operations methods */
@@ -84,12 +88,12 @@ namespace JScrambler.Client
             }
         }
 
-        public ProjectInfoResponse GetInfo(string projectId)
+        public ProjectInfoResult GetInfo(string projectId)
         {
             var resourcePath = string.Format("/code/{0}.json", projectId);
             var response = ExecuteRestRequest(Method.GET, resourcePath, new SortedDictionary<string, string>());
 
-            return new JsonDeserializer().Deserialize<ProjectInfoResponse>(response);
+            return new JsonDeserializer().Deserialize<ProjectInfoResult>(response);
         }
 
         public bool DownloadProject(string projectId)
@@ -199,7 +203,7 @@ namespace JScrambler.Client
                 parameters.Merge<string, string>(fileParams);
             }
 
-            parameters.Add("access_key", this.accessKey);
+            parameters.Add("access_key", this.serviceConfig.Credentials.AccessKey);
             parameters.Add("timestamp", (timestamp.HasValue ? timestamp.Value.ToString("yyyy-MM-ddTHH:mm:sszzz") : DateTimeOffset.Now.ToString("yyyy-MM-ddTHH:mm:sszzz"))); // ISO 8601 date
             parameters.Add("signature", GenerateHMACSignature(requestMethod, resourcePath, parameters));
 
@@ -254,7 +258,7 @@ namespace JScrambler.Client
             try
             {
                 var encoding = new System.Text.ASCIIEncoding();
-                byte[] keyByte = encoding.GetBytes(this.secretKey);
+                byte[] keyByte = encoding.GetBytes(this.serviceConfig.Credentials.SecretKey);
                 byte[] messageBytes = encoding.GetBytes(data);
 
                 using (var hmacsha256 = new HMACSHA256(keyByte))
@@ -272,7 +276,7 @@ namespace JScrambler.Client
 
         private string HMACSignatureData(string requestMethod, string resourcePath, SortedDictionary<string, string> parameters)
         {
-            return requestMethod.ToUpper() + ";" + this.apiHost.ToLower() + ";" + resourcePath + ";" + UrlQueryString(parameters);
+            return requestMethod.ToUpper() + ";" + this.serviceConfig.ApiHost.ToLower() + ";" + resourcePath + ";" + UrlQueryString(parameters);
         }
 
         private string UrlQueryString(SortedDictionary<string, string> parameters)

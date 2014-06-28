@@ -16,8 +16,7 @@ namespace JScrambler.Client.Tests
         [TestFixtureSetUp]
         public void Init()
         {
-            // TODO: load configuration from local json file or Web.config/App.config
-            jscrambler = new JScrambler("YOUR_ACCESS_KEY", "YOUR_SECRET_KEY");
+            jscrambler = new JScrambler();
         }
 
         [Test]
