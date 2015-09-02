@@ -50,7 +50,6 @@
     <Compile Include="Configuration\ServiceSection.cs" />
     <Compile Include="DeleteProjectResult.cs" />
     <Compile Include="DictionaryExtensions.cs" />
-    <Compile Include="IJScrambler.cs" />
     <Compile Include="JScrambler.cs" />
     <Compile Include="NullableDateTimeExtensions.cs" />
     <Compile Include="Project.cs" />

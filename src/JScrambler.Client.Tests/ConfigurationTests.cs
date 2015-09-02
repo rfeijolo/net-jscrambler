@@ -9,7 +9,7 @@ namespace JScrambler.Client.Tests
         [Test]
         public void CanReadConfiguration()
         {
-            System.Configuration.ConfigurationFileMap fileMap = new ConfigurationFileMap("App.test.config"); // path to test config file
+            System.Configuration.ConfigurationFileMap fileMap = new ConfigurationFileMap("App.config"); // path to test config file
             System.Configuration.Configuration configuration = System.Configuration.ConfigurationManager.OpenMappedMachineConfiguration(fileMap);
 
             var serviceConfig = configuration.GetSection(ServiceSection.SectionName) as ServiceSection;

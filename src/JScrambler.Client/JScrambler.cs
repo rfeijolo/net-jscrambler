@@ -13,7 +13,7 @@ using System.Configuration;
 
 namespace JScrambler.Client
 {
-    public class JScrambler : IJScrambler
+    public class JScrambler
     {
         private readonly ServiceSection serviceConfig;
 
@@ -27,7 +27,8 @@ namespace JScrambler.Client
 
         public JScrambler()
         {
-            serviceConfig = ConfigurationManager.GetSection(ServiceSection.SectionName) as ServiceSection;
+            var section = ConfigurationManager.GetSection(ServiceSection.SectionName);
+            serviceConfig = section as ServiceSection;
         }
 
         public JScrambler(string accessKey, string secretKey)
