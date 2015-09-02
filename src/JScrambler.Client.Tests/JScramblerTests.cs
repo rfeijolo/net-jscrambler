@@ -1,11 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace JScrambler.Client.Tests
 {
@@ -130,17 +126,6 @@ namespace JScrambler.Client.Tests
             Assert.NotNull(uploadResponse);
             Assert.IsNotNullOrEmpty(uploadResponse.Id);
         }
-
-        // string splitting
-
-        // domain lock
-
-        // browser os lock
-
-        // self defending
-
-        // expiration date
-
 
         [Test]
         public void CanUpload_RenameLocal()
@@ -390,8 +375,6 @@ namespace JScrambler.Client.Tests
             Assert.IsNotNullOrEmpty(uploadResponse.Id);
         }
 
-        // ...
-
         [Test]
         public void CanGetInfo_All()
         {
@@ -524,7 +507,8 @@ namespace JScrambler.Client.Tests
         [Test]
         public void CannotDeleteProject_NonExistent()
         {
-            var deleteResponse = jscrambler.DeleteProject("fde99d708906b06ccf2cbf3079aaa3b903dcb30d");
+            var nonExistentId = "fde99d708906b06ccf2cbf3079aaa3b903dcb30d";
+            var deleteResponse = jscrambler.DeleteProject(nonExistentId);
 
             Assert.NotNull(deleteResponse);
             Assert.AreEqual(deleteResponse.Error, "404");

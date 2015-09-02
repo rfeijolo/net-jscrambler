@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JScrambler.Client
 {
@@ -406,10 +403,6 @@ namespace JScrambler.Client
                     parameters.Add("literal_hooking", predicatesExpression);
                 }
             }
-
-            // string_splitting
-
-            // ...
 
             /* Optimization code transformations */
 

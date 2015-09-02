@@ -13,9 +13,9 @@ using System.Configuration;
 
 namespace JScrambler.Client
 {
-    public class JScrambler
+    public class JScrambler : IJScrambler
     {
-        private ServiceSection serviceConfig;
+        private readonly ServiceSection serviceConfig;
 
         private string ApiUrl 
         {
@@ -204,7 +204,7 @@ namespace JScrambler.Client
             }
 
             parameters.Add("access_key", this.serviceConfig.Credentials.AccessKey);
-            parameters.Add("timestamp", (timestamp.HasValue ? timestamp.Value.ToString("yyyy-MM-ddTHH:mm:sszzz") : DateTimeOffset.Now.ToString("yyyy-MM-ddTHH:mm:sszzz"))); // ISO 8601 date
+            parameters.Add("timestamp", timestamp.ToISO8601String());
             parameters.Add("signature", GenerateHMACSignature(requestMethod, resourcePath, parameters));
 
             return parameters;
@@ -295,10 +295,6 @@ namespace JScrambler.Client
                     {
                         queryParamsString += UrlEncode(entry.Key) + "=" + UrlEncode(entry.Value) + "&";
                     }
-                    //else if (entry.Key == "asserts_elimination")
-                    //{
-                    //    queryParamsString += UrlEncode(entry.Key) + "=" + entry.Value + "&";
-                    //}
                     else
                     {
 
