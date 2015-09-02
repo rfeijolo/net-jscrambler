@@ -215,5 +215,4 @@ pip-log.txt
 .mr.developer.cfg
 
 # Real configuration files
-App.Config
 Web.Config
