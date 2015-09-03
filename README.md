@@ -97,3 +97,4 @@ TODO
 * Refactor `DownloadSourceCode`
 * Publish nuget package
 * WIKI with complete examples
+* Return Task and use async
